@@ -1,6 +1,11 @@
 ---
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
 - name: Install docker on node with apt
   ansible.builtin.include_tasks:
     file: apt.yml
   when:
-    - ansible_pkg_mgr == 'apt'
+    - ansible_facts["distribution"] == "Ubuntu"
+    - "'docker-ce' not in ansible_facts.packages"
