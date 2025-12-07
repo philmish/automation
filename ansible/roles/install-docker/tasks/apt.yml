@@ -1,0 +1,55 @@
+---
+- name: Uninstall obosolete packages
+  ansible.builtin.apt:
+    state: absent
+    package:
+      - docker.io
+      - docker-compose
+      - docker-compose-v2
+      - docker-doc
+      - podman-docker
+      - containerd
+      - runc
+
+- name: Install pre-requisits
+  ansible.builtin.apt:
+    update_cache: true
+    state: present
+    package:
+      - curl
+      - ca-certificates
+
+- name: Setup repository
+  ansible.builtin.script:
+    cmd: ubuntu_setup.sh
+
+- name: Install docker packages
+  ansible.builtin.apt:
+    update_cache: true
+    package:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+
+- name: Ensure docker group exists
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: "Add {{ ansible_user }} to docker group"
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+  when:
+    - add_ansible_user is defined
+    - add_ansible_user | bool
+
+- name: "Add {{ docker_users }} to docker group"
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  with_items: "{{ docker_users }}"

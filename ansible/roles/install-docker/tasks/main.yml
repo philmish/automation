@@ -1,0 +1,6 @@
+---
+- name: Install docker on node with apt
+  ansible.builtin.include_tasks:
+    file: apt.yml
+  when:
+    - ansible_pkg_mgr == 'apt'
