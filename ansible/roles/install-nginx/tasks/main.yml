@@ -1,0 +1,11 @@
+---
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Install nginx on Ubuntu node
+  ansible.builtin.include_tasks:
+    file: ubuntu.yml
+  when:
+    - ansible_facts["distribution"] == "Ubuntu"
+    - "'nginx' not in ansible_facts.packages"

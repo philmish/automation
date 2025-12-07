@@ -1,0 +1,27 @@
+---
+
+- name: Install nginx package
+  ansible.builtin.apt:
+    update_cache: true
+    package:
+      - nginx
+
+- name: Stop nginx service
+  ansible.builtin.service:
+    name: nginx
+    enabled: false
+    state: stopped
+  when:
+    - stop_service is defined
+    - stop_service | bool
+
+- name: Enable nginx service
+  ansible.builtin.service:
+    name: nginx
+    enabled: true
+    state: started
+  when:
+    - enable_service is defined
+    - enable_service | bool
+
+
