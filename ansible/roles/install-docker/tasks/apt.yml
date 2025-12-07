@@ -44,8 +44,8 @@
     groups: docker
     append: true
   when:
-    - add_ansible_user is defined
-    - add_ansible_user | bool
+    - add_ansible_user_to_docker_group is defined
+    - add_ansible_user_to_docker_group | bool
 
 - name: "Add {{ docker_users }} to docker group"
   ansible.builtin.user:
