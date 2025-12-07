@@ -1,0 +1,7 @@
+---
+- name: Install caddy
+  gather_facts: true
+  become: true
+  hosts: all
+  roles:
+    - { role: ../roles/install-caddy }
