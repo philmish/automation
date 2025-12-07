@@ -1,0 +1,38 @@
+---
+
+- name: Install pre-requists
+  ansible.builtin.apt:
+    update_cache: true
+    package:
+      - debian-keyring
+      - debian-archive-keyring
+      - apt-transport-https
+      - curl
+
+- name: Setup caddy repository
+  ansible.builtin.script:
+    cmd: ubuntu_setup.sh
+
+- name: Install caddy package
+  ansible.builtin.apt:
+    update_cache: true
+    package:
+      - caddy
+
+- name: Stop caddy service
+  ansible.builtin.service:
+    name: caddy
+    enabled: false
+    state: stopped
+  when:
+    - stop_service is defined
+    - stop_service | bool
+
+- name: Enable caddy service
+  ansible.builtin.service:
+    name: caddy
+    enabled: true
+    state: started
+  when:
+    - enable_service is defined
+    - enable_service | bool
