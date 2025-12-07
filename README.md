@@ -1,0 +1,15 @@
+# Automation
+
+This repository contains a collection of different resources used to create infrastructure in an automated fashion.
+This includes but is not limited to VMs and Containers.
+
+
+## Virtual Machines
+
+The basis for the setup and use of virtual machines in the context of this repository is `Proxmox`. The automation for creating VMs and setting them up assumes a running `PVE` setup with version >= 9.0.0
+
+For the creation of virtual machines `Terraform` with the `telmate/proxomox` provider is used. In most cases these VMs rely on a cloudinit ready template being available. Information about the creation of such templates is contained in the `hypervisor/cloudinit` subdirectory.
+Most of the information about how to work with cloudinit in the context of `Proxmox` comes from the following sources:
+
+- [Offical Proxmox Documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support)
+- [This very helpful Repository](https://github.com/UntouchedWagons/Ubuntu-CloudInit-Docs/tree/main)
