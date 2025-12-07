@@ -8,5 +8,5 @@
   ansible.builtin.include_tasks:
     file: ubuntu.yml
   when:
-    - ansible_distribution == "Ubuntu"
+    - ansible_facts["distribution"] == "Ubuntu"
     - "'redis' not in ansible_facts.packages"
