@@ -1,0 +1,7 @@
+---
+
+- name: Update node using apt
+  ansible.builtin.include_tasks:
+    file: apt.yml
+  when:
+    - ansible_pkg_mgr == "apt"
