@@ -1,0 +1,7 @@
+---
+- name: Install and setup Elk stack
+  gather_facts: true
+  become: true
+  hosts: all
+  roles:
+    - { role: ../roles/install-elk-stack }
