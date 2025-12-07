@@ -4,4 +4,4 @@
   become: true
   hosts: all
   roles:
-    - { role: roles/install-docker }
+    - { role: ../roles/install-docker }

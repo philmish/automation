@@ -2,5 +2,6 @@
 - name: Update nodes
   hosts: all
   gather_facts: true
+  become: true
   roles:
-    - { role: roles/update }
+    - { role: ../roles/update }
