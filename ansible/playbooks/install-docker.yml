@@ -3,5 +3,7 @@
   gather_facts: true
   become: true
   hosts: all
+  vars:
+    docker_users: []
   roles:
     - { role: ../roles/install-docker }
