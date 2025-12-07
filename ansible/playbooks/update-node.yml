@@ -1,0 +1,6 @@
+---
+- name: Update nodes
+  hosts: all
+  gather_facts: true
+  roles:
+    - { role: roles/update }
