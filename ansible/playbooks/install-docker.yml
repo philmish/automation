@@ -1,0 +1,7 @@
+---
+- name: Install docker on the nodes
+  gather_facts: true
+  become: true
+  hosts: all
+  roles:
+    - { role: roles/install-docker }
