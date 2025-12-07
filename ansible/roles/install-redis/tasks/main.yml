@@ -1,0 +1,12 @@
+---
+
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Install redis on ubuntu
+  ansible.builtin.include_tasks:
+    file: ubuntu.yml
+  when:
+    - ansible_distribution == "Ubuntu"
+    - "'redis' not in ansible_facts.packages"

@@ -1,0 +1,29 @@
+---
+
+- name: Install prerequesits
+  ansible.legacy.apt:
+    update_cache: true
+    package:
+      - lsb-release
+      - curl
+      - gpg
+
+- name: Add redis repository
+  ansible.legacy.script:
+    cmd: ubuntu_setup.sh
+
+- name: Install redis
+  ansible.builtin.apt:
+    update_cache: true
+    package:
+      - redis
+
+- name: Enable redis service
+  ansible.builtin.service:
+    name: redis
+    enabled: true
+    state: started
+  when:
+    - enable_service is defined
+    - enable_service | bool
+
