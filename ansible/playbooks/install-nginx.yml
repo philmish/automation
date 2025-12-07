@@ -1,0 +1,7 @@
+---
+- name: Install nginx
+  gather_facts: true
+  become: true
+  hosts: all
+  roles:
+    - { role: ../roles/install-nginx }
