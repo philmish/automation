@@ -1,0 +1,4 @@
+setup_kibana: true
+elastic_version: "8.x"
+enable_elastic: true
+enable_kibana: true

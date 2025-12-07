@@ -1,0 +1,35 @@
+---
+- name: Add Elastic GPG Key
+  ansible.builtin.shell:
+    cmd: wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+    creates: /usr/share/keyrings/elasticsearch-keyring.gpg
+
+- name: Add Elastic Repo
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/{{ elastic_version }}/apt stable main"
+    filename: "{{ elastic_version }}"
+    state: present
+    update_cache: false
+
+- name: Install Elasticsearch
+  ansible.builtin.apt:
+    update_cache: true
+    name: elasticsearch
+
+- name: Start/Enable Elasticsearch Systemd Service
+  ansible.builtin.systemd:
+    daemon-reload: true
+    name: elasticsearch
+    state: started
+    enabled: true
+  when:
+    - enable_elastic | bool
+
+- name: Reset elastic user password
+  ansible.builtin.shell:
+    cmd: /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+    stdin: "y"
+  register: ep
+  notify: Print Elastic Password
+  when:
+    - enable_elastic | bool

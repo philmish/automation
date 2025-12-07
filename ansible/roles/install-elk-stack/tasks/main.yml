@@ -1,0 +1,19 @@
+---
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Install elasticsearch on ubuntu node
+  ansible.builtin.include_tasks:
+    file: ubuntu_elastic.yml
+  when:
+    - ansible_facts["distribution"] == "Ubuntu"
+    - "'elasticsearch' not in ansible_facts.packages"
+
+- name: Install kibana on ubuntu node
+  ansible.builtin.include_tasks:
+    file: ubuntu_kibana.yml
+  when:
+    - ansible_facts["distribution"] == "Ubuntu"
+    - "'kibana' not in ansible_facts.packages"
+    - setup_kibana | bool
