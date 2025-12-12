@@ -31,6 +31,21 @@ variable "storage" {
   default = "local-lvm"
 }
 
+variable "cidomain" {
+  type = string
+  description = "searchdomain setup with cloud init"
+}
+
+variable "cidns" {
+  type = string
+  description = "Nameserver setup with cloud init"
+}
+
+variable "bridge" {
+  type = string
+  description = "Network bridge to use"
+}
+
 # services node
 
 variable "services_templ" {
@@ -52,6 +67,16 @@ variable "services_pw" {
 variable "services_ipconfig" {
   type = string
   description = "ipconfig for the network interface of the services node"
+}
+
+variable "services_host" {
+  type = string
+  description = "Host used in the ansible inventory produced for the services host"
+}
+
+variable "services_private_key" {
+  type = string
+  description = "Local path to ssh key used to provision services node"
 }
 
 # deployment node
@@ -77,6 +102,16 @@ variable "deployment_ipconfig" {
   description = "ipconfig for the network interface of the deployment node"
 }
 
+variable "deployment_host" {
+  type = string
+  description = "Host used in the ansible inventory produced for the deployment host"
+}
+
+variable "deployment_private_key" {
+  type = string
+  description = "Local path to ssh key used to provision deployment node"
+}
+
 # monitoring node
 
 variable "monitoring_templ" {
@@ -100,17 +135,12 @@ variable "monitoring_ipconfig" {
   description = "ipconfig for the network interface of the monitoring node"
 }
 
-variable "cidomain" {
+variable "monitoring_host" {
   type = string
-  description = "searchdomain setup with cloud init"
+  description = "Host used in the ansible inventory produced for the monitoring host"
 }
 
-variable "cidns" {
+variable "monitoring_private_key" {
   type = string
-  description = "Nameserver setup with cloud init"
-}
-
-variable "bridge" {
-  type = string
-  description = "Network bridge to use"
+  description = "Local path to ssh key used to provision monitoring node"
 }

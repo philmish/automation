@@ -53,3 +53,31 @@ module "development_stack" {
   bridge         = var.bridge
 
 }
+
+resource "local_file" "ansible_inventory" {
+  filename = "${path.cwd}/../../../dev_inventory.yml"
+  content = <<EOT
+all:
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+  children:
+    services:
+      hosts:
+        services:
+          ansible_user: ${local.vms.services.ci_user}
+          ansible_host: ${var.services_host}
+          ansible_ssh_private_key_file: ${var.services_private_key}
+    deployment:
+      hosts:
+        deployment:
+          ansible_user: ${local.vms.deployment.ci_user}
+          ansible_host: ${var.deployment_host}
+          ansible_ssh_private_key_file: ${var.deployment_private_key}
+    monitoring:
+      hosts:
+        monitoring:
+          ansible_user: ${local.vms.monitoring.ci_user}
+          ansible_host: ${var.monitoring_host}
+          ansible_ssh_private_key_file: ${var.monitoring_private_key}
+  EOT
+}
