@@ -13,3 +13,7 @@ Most of the information about how to work with cloudinit in the context of `Prox
 
 - [Offical Proxmox Documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support)
 - [This very helpful Repository](https://github.com/UntouchedWagons/Ubuntu-CloudInit-Docs/tree/main)
+
+Different combinations of VMs created with the provided terraform modules can be found in the `stacks` subdirectory of the terraform directory at the root of this repository.
+
+Each of these stacks assumes you crate a `secrets.auto.tfvars` file in it, which will not be tracked by git, containing all the specific definitions for your local setup.
