@@ -1,20 +1,3 @@
-variable "proxmox_api_url" {
-  type = string
-  description = "Base URL of the Proxmox instances API"
-}
-
-variable "proxmox_api_token_id" {
-  type = string
-  description = "ID used for the authentication with the Proxmox API"
-  sensitive = true
-}
-
-variable "proxmox_api_token" {
-  type = string
-  description = "Token used for authenticating the ID with the Proxmox API"
-  sensitive = true
-}
-
 variable "node" {
   type = string
   description = "Proxmox node to deploy the container on"
