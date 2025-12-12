@@ -2,6 +2,7 @@
 
 # local testing
 local_*
+*_inventory.yml
 
 # ansible
 /vaults/*
