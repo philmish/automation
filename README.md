@@ -17,3 +17,9 @@ Most of the information about how to work with cloudinit in the context of `Prox
 Different combinations of VMs created with the provided terraform modules can be found in the `stacks` subdirectory of the terraform directory at the root of this repository.
 
 Each of these stacks assumes you crate a `secrets.auto.tfvars` file in it, which will not be tracked by git, containing all the specific definitions for your local setup.
+
+## Setup and Configuration of Resources
+
+For setting up and configuring resources like virtual machines or containers `Ansible` is used.
+
+Each stack definition in the `terraform/stacks` directory creates an `Ansible` inventory at the root of this repository, which can then be used for running different playbooks against all or a subset of the created resources.

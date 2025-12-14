@@ -1,7 +1,7 @@
 locals {
   vms = {
     services = {
-      vmname    = "dev-services"
+      vmname    = "services.dev"
       memory    = 8192
       cores     = 4
       disk_size = "40G"
@@ -11,7 +11,7 @@ locals {
       ipconfig  = var.services_ipconfig
     }
     deployment = {
-      vmname    = "dev-deployment"
+      vmname    = "deployment.dev"
       memory    = 2048
       cores     = 2
       disk_size = "20G"
@@ -21,7 +21,7 @@ locals {
       ipconfig  = var.deployment_ipconfig
     }
     monitoring = {
-      vmname    = "dev-monitoring"
+      vmname    = "monitoring.dev"
       memory    = 4096
       cores     = 2
       disk_size = "20G"
