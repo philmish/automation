@@ -1,0 +1,15 @@
+---
+- name: Install cockroachdb
+  gather_facts: true
+  become: true
+  hosts: all
+  vars:
+    COCKROACH_VERSION: "v26.1.0"
+    COCKROACH_ARCHIVE: "cockroach-archive"
+    COCKROACH_CHECKSUM: "096e2d40a2b30ce296c13652b839e04612003aef2820cfc5b8d712d06c9d0d86"
+    DB_CERT_DIR: "/home/{{ ansible_user }}/cockroach/cert"
+    CERT_KEY_DIR: "/home/{{ ansible_user }}/cockroach/ca-keys"
+    DB_PORT: 25786
+    DASHBOARD_PORT: 8631
+  roles:
+    - { role: "../roles/install-cockroachdb" }
