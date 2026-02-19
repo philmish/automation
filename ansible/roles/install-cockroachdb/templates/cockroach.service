@@ -1,0 +1,8 @@
+[Unit]
+Description=Run secure single node cockroach cluster
+After=network.target
+
+[Service]
+Type=simple
+Restart=no
+ExecStart=cockroach start-single-node --certs-dir={{ DB_CERT_DIR }} --listen-addr={{ ansible_host }}:{{ DB_PORT }} --http-addr={{ ansible_host }}:{{ DASHBOARD_PORT }}

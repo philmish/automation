@@ -1,0 +1,54 @@
+---
+
+- name: Download Tar Archive
+  ansible.builtin.get_url:
+    url: "https://binaries.cockroachdb.com/cockroach-{{COCKROACH_VERSION}}.linux-amd64.tgz"
+    dest: "/tmp/"
+    checksum: "sha256:{{ COCKROACH_CHECKSUM }}"
+
+- name: Unarchive
+  ansible.builtin.unarchive:
+    src: "/tmp/cockroach-{{COCKROACH_VERSION}}.linux-amd64.tgz"
+    dest: "/tmp"
+    remote_src: true
+
+- name: Move to PATH
+  ansible.builtin.copy:
+    src: "/tmp/cockroach-{{ COCKROACH_VERSION }}.linux-amd64/cockroach"
+    dest: /usr/local/bin/
+    mode: '0755'
+    remote_src: true
+
+- name: Create path for GEOS libraries
+  ansible.builtin.file:
+    path: /usr/local/lib/cockroach
+    state: directory
+
+- name: Move GEOS library to loadable path
+  ansible.builtin.copy:
+    src: "/tmp/cockroach-{{ COCKROACH_VERSION }}.linux-amd64/lib/{{ item }}"
+    dest: "/usr/local/lib/{{ item }}"
+    remote_src: true
+  loop:
+    - "libgeos.so"
+    - "libgeos_c.so"
+
+- name: Create Cert and Keyfile dir
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ DB_CERT_DIR }}"
+    - "{{ CERT_KEY_DIR }}"
+
+- name: Generate keys and certs
+  ansible.builtin.shell:
+    cmd: |
+      cockroach cert create-ca --certs-dir={{ DB_CERT_DIR }} --ca-key={{ CERT_KEY_DIR }}/ca.key
+      cockroach cert create-node localhost {{ ansible_host }} --certs-dir={{ DB_CERT_DIR }} --ca-key={{ CERT_KEY_DIR }}/ca.key
+      cockroach cert create-client root --certs-dir={{ DB_CERT_DIR }} --ca-key={{ CERT_KEY_DIR }}/ca.key
+
+- name: Create systemd service
+  ansible.builtin.template:
+    src: cockroach.service
+    dest: /etc/systemd/system/cockroach.service
