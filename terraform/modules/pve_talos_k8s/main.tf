@@ -1,0 +1,42 @@
+resource "proxmox_vm_qemu" "pve_talos_k8s" {
+  vmid        = 0
+  name        = var.vmname
+  target_node = var.node
+  memory      = var.memory
+
+  cpu {
+    cores   = var.cores
+    sockets = 1
+  }
+
+  disks {
+    virtio {
+      virtio0 {
+        disk {
+          storage = var.disk_storage
+          size    = var.disk_size
+        }
+      }
+    }
+    ide {
+      ide2 {
+        cdrom {
+          iso = "${iso_storage}:iso/${iso_name}"
+        }
+      }
+    }
+  }
+
+  onboot     = true
+  scsihw     = "virtio-scsi-pci"
+  boot_order = "virtio0"
+
+
+  network {
+    id     = 0
+    model  = var.nic_model
+    bridge = var.network_bridge
+  }
+
+  ipconfig0  = var.ip_config
+}
