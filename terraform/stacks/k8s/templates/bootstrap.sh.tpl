@@ -3,7 +3,7 @@
 set -euo pipefail
 
 TALOSCONFIG=$(mktemp)
-trap 'rm -rf $TALOSCONFIG'
+trap 'rm -rf $TALOSCONFIG' EXIT
 
 # configuration from terraform provider
 echo '${talosconfig}' > $TALOSCONFIG

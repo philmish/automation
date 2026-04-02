@@ -37,5 +37,6 @@ resource "proxmox_vm_qemu" "pve_talos_k8s" {
     bridge = var.network_bridge
   }
 
+  nameserver = var.name_servers[0]
   ipconfig0  = var.ip_config
 }
