@@ -6,20 +6,23 @@ locals {
       cores     = 4
       disk_size = "60G"
       ipconfig  = var.controlplane_ipconfig
+      ip        = var.controlplane_ip
     }
     worker1 = {
       vmname    = "worker-1.talos"
       memory    = 4096
       cores     = 2
-      disk_size = "40GB"
+      disk_size = "40G"
       ipconfig  = var.worker1_ipconfig
+      ip        = var.worker1_ip
     }
     worker2 = {
       vmname   = "worker-2.talos"
       memory    = 4096
       cores     = 2
-      disk_size = "40GB"
+      disk_size = "40G"
       ipconfig  = var.worker2_ipconfig
+      ip        = var.worker2_ip
     }
   }
 }
@@ -29,7 +32,7 @@ resource "talos_machine_secrets" "this" {}
 data "talos_machine_configuration" "controlplane" {
   cluster_name     = var.cluster_name
   machine_type     = "controlplane"
-  cluster_endpoint = "https://{$var.controlplane_ip}:6443"
+  cluster_endpoint = "https://${var.controlplane_ip}:6443"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 
   config_patches = [
@@ -55,7 +58,7 @@ data "talos_machine_configuration" "controlplane" {
 data "talos_machine_configuration" "worker1" {
   cluster_name     = var.cluster_name
   machine_type     = "worker"
-  cluster_endpoint = "https://{$var.controlplane_ip}:6443"
+  cluster_endpoint = "https://${var.controlplane_ip}:6443"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 
   config_patches = [
@@ -81,7 +84,7 @@ data "talos_machine_configuration" "worker1" {
 data "talos_machine_configuration" "worker2" {
   cluster_name     = var.cluster_name
   machine_type     = "worker"
-  cluster_endpoint = "https://{$var.controlplane_ip}:6443"
+  cluster_endpoint = "https://${var.controlplane_ip}:6443"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 
   config_patches = [
@@ -105,9 +108,9 @@ data "talos_machine_configuration" "worker2" {
 }
 
 data "talos_client_configuration" "this" {
-  cluster_name     = var.cluster_name
-  client_endpoints = [var.controlplane_ip]
-  machine_secrets  = talos_machine_secrets.this.machine_secrets
+  cluster_name          = var.cluster_name
+  nodes                 = [var.controlplane_ip]
+  client_configuration  = talos_machine_secrets.this.client_configuration
 }
 
 module "talos_k8s" {
@@ -116,26 +119,28 @@ module "talos_k8s" {
   for_each       = local.nodes
   node           = var.node
   iso_name       = var.vm_iso
-  name_server    = var.cluster_name_server
+  name_servers   = var.cluster_name_server
   gateway        = var.cluster_gateway
   network_bridge = var.cluster_network_bridge
+  vm_ip          = each.value.ip
   vmname         = each.value.vmname
   memory         = each.value.memory
+  disk_size      = each.value.disk_size
   cores          = each.value.cores
-  ipconfig       = each.value.ipconfig
+  ip_config      = each.value.ipconfig
 }
 
 resource "local_file" "bootstrap_script" {
   content = templatefile("${path.module}/templates/bootstrap.sh.tpl", {
-    controlplane_ip       = var.controlplane_ip
-    controlplane_config   = base64encode(data.talos_machine_configuration.controlplane.talos_machine_configuration)
+    controlplane_ip     = var.controlplane_ip
+    controlplane_config = base64encode(data.talos_machine_configuration.controlplane.machine_configuration)
 
-    worker1_ip            = var.worker1_ip
-    worker1_configuration = base64encode(data.talos_machine_configuration.worker1.talos_machine_configuration)
+    worker1_ip          = var.worker1_ip
+    worker1_config      = base64encode(data.talos_machine_configuration.worker1.machine_configuration)
 
-    worker2_ip            = var.worker2_ip
-    worker2_configuration = base64encode(data.talos_machine_configuration.worker2.talos_machine_configuration)
-    talos_configuration   = data.talos_client_configuration.this.talos_config
+    worker2_ip          = var.worker2_ip
+    worker2_config      = base64encode(data.talos_machine_configuration.worker2.machine_configuration)
+    talosconfig         = data.talos_client_configuration.this.talos_config
   })
   filename        = "${path.module}/bootstrap.sh"
   file_permission = "0755"

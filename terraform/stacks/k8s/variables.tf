@@ -27,6 +27,14 @@ variable "vm_iso" {
   description = "Name of the iso file used to create all vms in the cluster"
 }
 
+# Cluster
+
+variable "cluster_name" {
+  type        = string
+  description = "Name of the kubernetes cluster"
+  default     = "talos-k8s"
+}
+
 # Network
 variable "cluster_name_server" {
   type        = list(string)

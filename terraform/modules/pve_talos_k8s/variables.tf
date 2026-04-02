@@ -11,7 +11,7 @@ variable "disk_storage" {
   default = "local-lvm"
 }
 
-variable "iso_stoage" {
+variable "iso_storage" {
   type        = string
   description = "Storage volume containing ISOs"
   default     = "local"

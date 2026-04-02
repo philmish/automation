@@ -21,7 +21,7 @@ resource "proxmox_vm_qemu" "pve_talos_k8s" {
     ide {
       ide2 {
         cdrom {
-          iso = "${iso_storage}:iso/${iso_name}"
+          iso = "${var.iso_storage}:iso/${var.iso_name}"
         }
       }
     }
@@ -29,7 +29,6 @@ resource "proxmox_vm_qemu" "pve_talos_k8s" {
 
   onboot     = true
   scsihw     = "virtio-scsi-pci"
-  boot_order = "virtio0"
 
 
   network {
