@@ -22,6 +22,27 @@ variable "node" {
   default = "pve"
 }
 
+variabe "vm_iso" {
+  type        = string
+  description = "Name of the iso file used to create all vms in the cluster"
+}
+
+# Network
+variable "cluster_name_server" {
+  type        = list(string)
+  description = "Nameserver used by all vms in the cluster"
+}
+
+variable "cluster_gateway" {
+  type        = string
+  description = "Network Gateway used by all vms in the cluster"
+}
+
+variable "cluster_network_bridge" {
+  type        = string
+  description = "Proxmox network bridge used by all vms in the cluster"
+}
+
 # Cluster Nodes
 
 variable "controlplane_ip" {
