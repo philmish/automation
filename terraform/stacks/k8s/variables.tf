@@ -22,7 +22,7 @@ variable "node" {
   default = "pve"
 }
 
-variabe "vm_iso" {
+variable "vm_iso" {
   type        = string
   description = "Name of the iso file used to create all vms in the cluster"
 }
