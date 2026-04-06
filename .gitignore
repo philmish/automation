@@ -7,6 +7,9 @@ local_*
 # ansible
 /vaults/*
 
+# k8s
+terraform/stacks/k8s/configs/*
+
 # terraform
 secrets.auto.tfvars
 .terraform
