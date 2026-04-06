@@ -1,12 +1,8 @@
 terraform {
   required_providers {
     proxmox = {
-      source  = "Telmate/proxmox",
-      version = "3.0.2-rc04"
-    }
-    talos = {
-      source  = "siderolabs/talos"
-      version = "~> 0.7.0"
+      source  = "bpg/proxmox",
+      version = "~> 0.100.0"
     }
     local = {
       source  = "hashicorp/local"
@@ -16,9 +12,13 @@ terraform {
 }
 
 provider "proxmox" {
-  pm_api_url = var.proxmox_api_url
-  pm_api_token_id = var.proxmox_api_token_id
-  pm_api_token_secret = var.proxmox_api_token
+  endpoint  = var.proxmox_api_url
+  api_token = "${var.proxmox_api_token_id}=${var.proxmox_api_token}"
+  ssh {
+    agent       = false
+    username    = var.proxmox_ssh_user
+    private_key = file(var.proxmox_ssh_key_file)
+  }
 }
 
 
